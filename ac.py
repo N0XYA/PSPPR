@@ -61,6 +61,7 @@ def check(index):
             f3.append(index)
     return
 
+
 f2_df = pd.DataFrame([f2_form])
 
 
