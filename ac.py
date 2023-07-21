@@ -92,3 +92,4 @@ for i in range(len(f2_df.columns)):
 print("\nНЕСВЯЗЫВАЕМЫЕ НАБОРЫ\n")
 for row in f3:
     print(row)
+print("Finally opened on win7")
