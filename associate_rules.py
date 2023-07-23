@@ -74,6 +74,22 @@ def find_third(index, first, second):
     return third
 
 
+def support(len):
+    sup = round(len / num_of_trans * 100, 1)
+    return sup
+
+
+def reliability(len, f, s):
+    key = f + ' ' + s
+    for words in all_pairs:
+        if key == words:
+            value = all_pairs[words]
+
+    rel = round(len / value * 100, 1)
+    return rel
+
+
+
 def rules_generation(dict):
     sets = []
     for index in dict:
@@ -87,9 +103,48 @@ def rules_generation(dict):
                 third = find_third(index, first, second)
                 associate = transactions_table.loc[(transactions_table[first] == 1) & (transactions_table[second] == 1)
                 & (transactions_table[third] == 1)]
-                print(associate)
+                lengh = len(associate)
+                supp = support(lengh)
+                rel = reliability(lengh, first, second)
+                sc = round(supp * rel, 3)
+                print(first, second, '->', third, '|', 'Поддержка - ',  supp, 'Достоверность - ', rel, 'SC - ', sc)
                 num += 1
-    return sets
+    return
+
+
+
+def associate(f, s):
+    result = transactions_table.loc[(transactions_table[f] == 1) & (transactions_table[s] == 1)]
+    return len(result)
+
+
+def rel_f2(assos, s):
+    all = len(transactions_table.loc[(transactions_table[s] == 1)])
+    result = round(assos / all * 100, 1)
+    return result
+
+def rules_f2(dict):
+    sets = []
+    for index in dict:
+        sets.append(index.split(" "))
+
+    for pair in sets:
+        first = pair[0]
+        second = pair[1]
+        assoc = associate(first, second)
+        sup = support(assoc)
+        rel = rel_f2(assoc, first)
+        sc = round(sup * rel, 3)
+        print(first, second, '|',  'Поддержка - ', sup, 'Достоверность - ',  rel, 'SC - ', sc)
+
+        first = pair[1]
+        second = pair[0]
+        assoc = associate(first, second)
+        sup = support(assoc)
+        rel = rel_f2(assoc, first)
+        sc = round(sup * rel, 3)
+        print(first, second, '|', 'Поддержка - ', sup, 'Достоверность - ',  rel, 'SC - ', sc)
+    return
 
 
 f1 = get_col_sum(transactions_table)
@@ -100,6 +155,5 @@ f2 = make_f2(all_pairs)
 # print_dict(f2)
 f3 = make_f3(f2)
 # print_dict(f3)
-
-sets = rules_generation(f3)
-
+rules_generation(f3)
+# rules_f2(f2)
