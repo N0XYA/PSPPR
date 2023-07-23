@@ -3,7 +3,6 @@ import pandas as pd
 
 transactions_table = pd.read_excel('transactions.xlsx')
 
-
 def get_col_sum(table):
     for name in table:
         if table[name].sum() < 4:
@@ -66,10 +65,41 @@ def make_f3(dict):
 
     return f3
 
+
+def find_third(index, first, second):
+    third = ''
+    for name in index:
+        if name != first and name != second:
+            third = name
+    return third
+
+
+def rules_generation(dict):
+    sets = []
+    for index in dict:
+        sets.append(index.split(" "))
+
+    for index in sets:
+        for num in range(len(index)):
+            first = index[num]
+            while num < len(index) - 1:
+                second = index[num + 1]
+                third = find_third(index, first, second)
+                associate = transactions_table.loc[(transactions_table[first] == 1) & (transactions_table[second] == 1)
+                & (transactions_table[third] == 1)]
+                print(associate)
+                num += 1
+    return sets
+
+
 f1 = get_col_sum(transactions_table)
+num_of_trans = len(f1.index)
 all_pairs = merge(f1)
 # print_dict(all_pairs)
 f2 = make_f2(all_pairs)
 # print_dict(f2)
 f3 = make_f3(f2)
-print_dict(f3)
+# print_dict(f3)
+
+sets = rules_generation(f3)
+
