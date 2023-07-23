@@ -92,4 +92,13 @@ for i in range(len(f2_df.columns)):
 print("\nНЕСВЯЗЫВАЕМЫЕ НАБОРЫ\n")
 for row in f3:
     print(row)
-print("Finally opened on win7")
+
+
+def associate_rules(list):
+    for row in list:
+        for item in range(len(row)):
+            pass
+    return
+
+
+associate_rules(f3)
