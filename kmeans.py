@@ -42,7 +42,7 @@ def what_cluster(centers, obj):
         dist = []
         for cn in centers:
             dist.append(round(math.dist(cn, coords), 2))
-        # print(dist)
+            
 
         if dist[0] <= dist[1]:
             first_c.append(coords)
@@ -52,12 +52,17 @@ def what_cluster(centers, obj):
 
 # centers = choose_centers(test_obj)
 
+def offset():
+
+    pass
+
 centers = [[1, 1],[2,1]]
 print('centers are', centers)
+clusters = {}
 f, s = what_cluster(centers, test_obj)
 
-for i in s:
-    print(i)
+# for i in f:
+#     print(i)
 # x = [coord[0] for coord in test_obj]
 # y = [coord[1] for coord in test_obj]
 # k1 = random.choice(test_obj)
