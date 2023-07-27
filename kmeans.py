@@ -7,7 +7,8 @@ xrange = 10
 yrange = 10
 test_obj = [[1, 3], [3, 3], [4, 3], [5, 3],
             [1, 2], [4, 2], [1, 1], [2, 1]]
-k = 2
+
+num_of_clusters = 2
 
 
 def create_obj(xrange, yrange):
@@ -26,7 +27,7 @@ def create_obj(xrange, yrange):
 
 def choose_centers(obj):
     centers = []
-    for i in range(0, k):
+    for i in range(0, num_of_clusters):
         centers.append(random.choice(obj))
     return centers
 
@@ -36,19 +37,21 @@ def choose_centers(obj):
 
 
 def what_cluster(centers, obj):
-    first_c = []
-    second_c = []
+    clusters_sorted = {}
     for coords in obj:
+        minuclus = {}
+        # print(coords)
         dist = []
         for cn in centers:
             dist.append(round(math.dist(cn, coords), 2))
-            
-
-        if dist[0] <= dist[1]:
-            first_c.append(coords)
-        else:
-            second_c.append(coords)
-    return first_c, second_c
+        dist.sort()
+        print(dist)
+    print(clusters_sorted)
+        # if dist[0] <= dist[1]:
+        #     first_c.append(coords)
+        # else:
+        #     second_c.append(coords)
+    # return first_c, second_c
 
 # centers = choose_centers(test_obj)
 
@@ -59,7 +62,7 @@ def offset():
 centers = [[1, 1],[2,1]]
 print('centers are', centers)
 clusters = {}
-f, s = what_cluster(centers, test_obj)
+what_cluster(centers, test_obj)
 
 # for i in f:
 #     print(i)
