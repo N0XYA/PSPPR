@@ -8,7 +8,7 @@ yrange = 10
 test_obj = [[1, 3], [3, 3], [4, 3], [5, 3],
             [1, 2], [4, 2], [1, 1], [2, 1]]
 
-num_of_clusters = 2
+num_of_clusters = 4
 
 
 def create_obj(xrange, yrange):
@@ -53,16 +53,47 @@ def what_cluster(centers, obj):
         #     second_c.append(coords)
     # return first_c, second_c
 
-# centers = choose_centers(test_obj)
+
+def get_key(dict, value):
+    for k , v in dict.items():
+        if v == value:
+            return k
+
+
+def choose_cluster(centers, object):
+    clusters = {}
+    for item in centers:
+        item = tuple(item)
+        clusters[item] = []
+    for coordinates in object:
+        # print('coords are:', coordinates)
+        distance = {}
+        for item in centers:
+            item = tuple(item)
+            crd = tuple(coordinates)
+            distance[item] = round(math.dist(item, coordinates), 2)
+        # print(distance, coordinates)
+        min_distance = min(distance.values())
+        key = get_key(distance, min_distance)
+        # print('min', min_distance)
+        # print('точка', coordinates, 'принадлежит кластеру с центром в ', key)
+        # print(type(key))
+        clusters[key].append(coordinates)
+    return clusters
 
 def offset():
 
     pass
 
+
+# centers = choose_centers(test_obj)
 centers = [[1, 1],[2,1]]
 print('centers are', centers)
-clusters = {}
-what_cluster(centers, test_obj)
+clusters = choose_cluster(centers, test_obj)
+# what_cluster(centers, test_obj)
+
+for items in clusters:
+    print(items, clusters[items])
 
 # for i in f:
 #     print(i)
