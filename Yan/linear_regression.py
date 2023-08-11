@@ -1,14 +1,17 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import time
+
 
 x = [0.90, 4.11, 4.82, 8.53, 8.90]
 y = [1.91, 1.84, 4.47, 6.38, 3.92]
 
+plt.ion()
 def go(x, y):
     m,b = 1,1
     nu = 0.1
 
-    for i in range (10):
+    for i in range (100):
         y_pred = [x * m + b for x in x]
 
         err = [ abs(y[i] - y_pred[i]) for i in range(0, len(y)) ]
@@ -23,11 +26,15 @@ def go(x, y):
 
         m = m + nu * m_mean
         b = b + nu * b_mean
-    
-    plt.scatter(x, y)
-    plt.plot(x, y_pred)
-    plt.grid()
+
+        plt.clf()
+        plt.scatter(x, y)
+        plt.plot(x, y_pred)
+        plt.draw()
+        plt.gcf().canvas.flush_events()
+        time.sleep(0.2)
+    plt.ioff()
     plt.show()
 
-# f(x) = mx + b 
+
 go(x, y)
