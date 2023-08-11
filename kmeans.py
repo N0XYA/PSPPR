@@ -3,17 +3,17 @@ import matplotlib.pyplot as plt
 import math
 
 
-xrange = 10
-yrange = 10
+xrange = 1000
+yrange = 1000
 test_obj = [[1, 3], [3, 3], [4, 3], [5, 3],
             [1, 2], [4, 2], [1, 1], [2, 1]]
 
-num_of_clusters = 2
+num_of_clusters = 3
 
 
 def create_obj(xrange, yrange):
     object = []
-    num_of_objects = 10
+    num_of_objects = 30
     print('obj len = ', num_of_objects)
     for i in range(0, num_of_objects):
         coord = [random.uniform(-xrange, xrange), random.uniform(-yrange, yrange)]

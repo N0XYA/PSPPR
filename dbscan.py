@@ -3,91 +3,144 @@ import matplotlib.pyplot as plt
 import random
 import math
 
-obj = [(1, 3), (3, 3), (4, 3), (5, 3),
-            (1, 2), (4, 2), (1, 1), (2, 1)]
-m = 2
-e = 2
+min_samples = 2
+eps = 2.05
 
 # Достаем координаты из файла
 
-# with open("Coordinates.pickle", "rb") as file:
-#     obj = pickle.load(file)
-# file.close()
+with open("Coordinates.pickle", "rb") as file:
+    obj = pickle.load(file)
+file.close()
 
 
-
-def findNeighbours(coodinate, object):
-    coords = []
-    for point in object:
-        if point == coodinate:
+def howManyNeighbours(point):
+    neighbours_count = 0
+    for neighbours in obj:
+        if neighbours == point:
             continue
-        if math.dist(point, coodinate) < e:
-            coords.append(point)
-    return coords
+        if math.dist(point, neighbours) <= eps:
+            neighbours_count += 1
+    return neighbours_count
 
 
-def clusterization(neighbours, unmarked, center):
-    cluster = {'center': center, 'objects': [], 'border': []}
-    print(neighbours)
-    for coordinate in neighbours:
-        points_in_range = findNeighbours(coordinate, unmarked)
-        points_in_range.remove(center)
-        print(coordinate, 'points what are in range',points_in_range)
-        if len(points_in_range) <= m:
-            cluster['border'] = coordinate
-        else:
-            cluster.append(clusterization(points_in_range, unmarked, center))
-            print("end of clusterization")
-            print(cluster)
+def findCorePoints(unmarked):
+    core_points = []
+    for point in unmarked:
+        num_of_neighbours = howManyNeighbours(point)
+        if num_of_neighbours >= min_samples:
+            core_points.append(point)
+        # print(item, core_points[item])
+    return core_points
+
+
+def findBlackPoints(unmarked, core_points):
+    blacks = []
+    for point in unmarked:
+        if point not in core_points:
+            blacks.append(point)
+    return blacks
+
+
+def findClusters(core_points, black_points):
+    cluster = []
+    start_cluster = random.choice(core_points)
+    cluster.append(start_cluster)
+    core_points.remove(start_cluster)
+    for cluster_point in cluster:
+        for point in core_points:
+            if math.dist(cluster_point, point) <= eps:
+                cluster.append(point)
+                core_points.remove(point)
+
+        for black_point in black_points:
+            if math.dist(cluster_point, black_point) <= eps:
+                cluster.append(black_point)
+                black_points.remove(black_point)
     return cluster
 
 
-def clust(center, neighbours, unmarked):
-    border_points = []
-    core_points = []
-    print('cluster center', center)
-    print('cluster points', neighbours)
-    for coordinate in neighbours:
-        print('checking', coordinate)
-        new_neighbours = findNeighbours(coordinate, unmarked)
-        print(new_neighbours)
-        for new_neigh in new_neighbours:
-            if len(new_neighbours) >= m:
-                print(len(new_neighbours), '=> making new clust')
-                if new_neigh not in core_points:
-                    core_points.append(new_neigh)
-                    unmarked.remove(new_neigh)
-            else:
-                border_points.append(new_neigh)
-                unmarked.remove(new_neigh)
-    print('border points', border_points)
-    print('core points', core_points)
+def main():
+    core_points = findCorePoints(obj)
+    black_points = findBlackPoints(obj, core_points)
+    print(len(core_points))
 
-    return
+    clusters = []
+    while len(core_points) > 0:
+        clusters.append(findClusters(core_points, black_points))
+    print(len(core_points))
+
+    x = [coord[0] for coord in obj]
+    y = [coord[1] for coord in obj]
+    plt.scatter(x, y, c='black', marker= '+')
+
+    for clust in clusters:
+        x = [coordinate[0] for coordinate in clust]
+        y = [coordinate[1] for coordinate in clust]
+        plt.scatter(x, y)
+
+    plt.show()
 
 
-def dbscan(object):
-    clusters = {}
-    noize = []
-    unmarked = object
-    while len(unmarked) != 0:
-        coordinate = random.choice(unmarked)
-        neighbours = findNeighbours(coordinate, unmarked)
-        if len(neighbours) < m:
-            noize.append(coordinate)
-
-        else:
-            cluster = clust(coordinate, neighbours, unmarked)
-            clusters[coordinate] = neighbours
-            unmarked.remove(coordinate)
-    return
+if __name__ == '__main__':
+    main()
 
 
-dbscan(obj)
 '''
-Вывод графика
+HISTORY
 '''
+
+# def if_core(coord):
+#     count = 0
+#     samples_around_core = []
+#     for point in obj:
+#         if point == coord:
+#             continue
+#         if math.dist(coord, point) <= eps:
+#             count += 1
+#             samples_around_core.append(point)
+#
+#     return count, samples_around_core
+#
+#
+# def find_centers():
+#     core_points = []
+#     clusters = {}
+#     for coord in obj:
+#         coord = tuple(coord)
+#         num_of_neighbours, neighbours = if_core(coord)
+#         if num_of_neighbours >= min_samples:
+#             clusters[coord] = neighbours
+#             core_points.append(coord)
+#
+#     return clusters
+#
+#
+# # core_points = find_centers()
+#
+# # print(core_points)
+#
+# clusters = find_centers()
+# print(clusters)
+#
+# for samples in clusters.values():
+#     for coordinate in samples:
+#         if coordinate in obj:
+#             obj.remove(coordinate)
+# for clust in clusters:
+#     center = clust
+#     centerx = center[0]
+#     centery = center[1]
+#     x = [cord[0] for cord in clusters[center]]
+#     y = [cord[1] for cord in clusters[center]]
+#     plt.scatter(x, y)
+#     plt.scatter(centerx, centery, c='red',marker= '+')
+#
 # x = [coord[0] for coord in obj]
 # y = [coord[1] for coord in obj]
-# plt.scatter(x, y)
+#
+# plt.scatter(x, y, c='black', marker='+')
 # plt.show()
+# # corex = [coord[0] for coord in core_points]
+# # corey = [coord[1] for coord in core_points]
+# # plt.scatter(x, y)
+# # plt.show()
