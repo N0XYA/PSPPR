@@ -48,12 +48,23 @@ def getStandartDeviation(height, weight, mH, mW):
     return height_dispersion, weight_dispersion
 
 
+def normalDistribution(stat, mu, dispersion):
+    norm = []
+    for coords in stat:
+        degree = ((coords - mu)**2) / (2 * dispersion**2)
+        degree = degree * -1
+        norm.append(math.exp(degree) / (math.sqrt(2 * math.pi * dispersion)))
+    return norm
+
+
 def Bayes():
     men, women = dividePeople(list_of_people)
     men_probability = len(men) / len(list_of_people)
     women_probability = 1 - men_probability
+
     men_height, men_weight = getHeightWeight(men)
     women_height, women_weight = getHeightWeight(women)
+
     men_height_M, men_weight_M = getExpected(men_height, men_weight)
     women_height_M, women_weight_M = getExpected(women_height, women_weight)
 
@@ -65,6 +76,21 @@ def Bayes():
 
     print(random.uniform(0, 1))
     guess = ""
+    men_normal_H = normalDistribution(men_height,  men_height_M, men_height_StDeviation)
+    men_normal_W = normalDistribution(men_weight, men_weight_M, men_weight_StDeviation)
+    women_normal_H = normalDistribution(women_height, women_height_M, women_height_StDeviation)
+    women_normal_W = normalDistribution(women_weight, women_weight_M, women_weight_StDeviation)
+    print(len(men_height), len(men_normal_H))
+
+    fig, axs = plt.subplots(nrows=1, ncols=2)
+    axs[0].scatter(men_height, men_normal_H)
+    axs[0].scatter(women_height, women_normal_H)
+    axs[1].scatter(men_weight, men_normal_W)
+    axs[1].scatter(women_weight, women_normal_W)
+    # plt.scatter(men_height, men_normal_H)
+    # plt.scatter(women_height, women_normal_H)
+
+    plt.show()
     return guess
 
 
