@@ -97,6 +97,16 @@ PmWeightNormal = toFloat(PmWeightNormal)
 PwHeightNormal = toFloat(PwHeightNormal)
 PwWeightNormal = toFloat(PwWeightNormal)
 
+if PmHeightNormal > PwHeightNormal:
+    yH = PmHeightNormal
+else:
+    yH = PwHeightNormal
+
+if PmWeightNormal > PwWeightNormal:
+    yW = PmWeightNormal
+else:
+    yW = PwWeightNormal
+
 # uHeight = toFloat(uHeight)
 ManProbability = men_probability * PmHeightNormal * PmWeightNormal
 WomanProbability = women_probability * PwHeightNormal * PwWeightNormal
@@ -114,8 +124,10 @@ print("Guess ->", guess)
 fig, axs = plt.subplots(nrows=1, ncols=2)
 axs[0].scatter(mHeightDict.keys(), mHeightDict.values())
 axs[0].scatter(wHeightDict.keys(), wHeightDict.values())
-axs[0].scatter(uHeight, 0, marker= "x", c='black')
+axs[0].axvline(uHeight, ymin=0, ymax=1, c='black')
+axs[0].scatter(uHeight, yH, marker= "x", c='red')
 axs[1].scatter(mWeightDict.keys(), mWeightDict.values())
 axs[1].scatter(wWeightDict.keys(), wWeightDict.values())
-axs[1].scatter(uWeight, 0, marker= "x", c='black')
+axs[1].axvline(uWeight, ymin=0, ymax=1, c='black')
+axs[1].scatter(uWeight, yW, marker= "x", c='red')
 plt.show()
