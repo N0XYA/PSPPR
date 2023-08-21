@@ -1,5 +1,4 @@
 import random
-
 import pandas as pd
 import statistics as st
 import math
@@ -72,7 +71,7 @@ def Bayes():
                                                                           men_weight_M)
     women_height_StDeviation, women_weight_StDeviation = getStandartDeviation(women_height, women_weight,
                                                                               women_height_M, women_weight_M)
-    print(women_height_StDeviation)
+    print('std', women_height_StDeviation)
 
     print(random.uniform(0, 1))
     guess = ""
