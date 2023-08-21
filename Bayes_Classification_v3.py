@@ -50,7 +50,7 @@ def makeDict(param, normal):
 def toFloat(list):
     float = list[0]
     return float
-DataFrame = pd.read_csv('500_Person_Gender_Height_Weight_Index.csv')
+DataFrame = pd.read_csv('gender_height_weight.csv')
 list_of_people = DataFrame.values.tolist()
 men_l, women_l = dividePeople(list_of_people)
 #Вероятность кластеров
@@ -76,11 +76,14 @@ wHeightDict, wWeightDict = makeDict(womenHeight, wHeightNormal), makeDict(womenW
 #ОБУЧЕНИЕ ЗАВЕРШЕНО!
 
 #ОПРЕДЕЛЯЕМ ОБЪЕКТ
-unknown = [['Unknown', 186, 40, "doesn't matter"]]
+unknown = [['Unknown', 186, 74, "doesn't matter"]]
+#См в дюймы и кг в фунты
+unknown[0][1] = unknown[0][1] * 0.393701
+unknown[0][2] = unknown[0][2] * 2.20462
 uHeight = getHeight(unknown)
 uWeight = getWeight(unknown)
-uHGauss = GaussDist(uHeight, uHeight, 0)
-uWGauss = GaussDist(uWeight, uWeight, 0)
+# uHGauss = GaussDist(uHeight, uHeight, 0)
+# uWGauss = GaussDist(uWeight, uWeight, 0)
 
 
 #Нахождение вероятностей принадлежности к кластерам
@@ -114,4 +117,5 @@ axs[0].scatter(wHeightDict.keys(), wHeightDict.values())
 axs[0].scatter(uHeight, 0, marker= "x", c='black')
 axs[1].scatter(mWeightDict.keys(), mWeightDict.values())
 axs[1].scatter(wWeightDict.keys(), wWeightDict.values())
+axs[1].scatter(uWeight, 0, marker= "x", c='black')
 plt.show()
