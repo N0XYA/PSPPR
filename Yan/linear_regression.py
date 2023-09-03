@@ -3,15 +3,15 @@ import numpy as np
 import time
 
 
-x = [0.90, 4.11, 4.82, 8.53, 8.90]
-y = [1.91, 1.84, 4.47, 6.38, 3.92]
+x = [0.90, 4.11, 4.82, 8.53, 8.90, 5.60, 9.32, 11.1, 12.42]
+y = [1.91, 1.84, 4.47, 6.38, 3.92, 2.42, 6.52, 8.63, 9.13]
 
-plt.ion()
 def go(x, y):
+    plt.ion()
     m,b = 1,1
     nu = 0.1
 
-    for i in range (100):
+    for i in range (10):
         y_pred = [x * m + b for x in x]
 
         err = [ abs(y[i] - y_pred[i]) for i in range(0, len(y)) ]
