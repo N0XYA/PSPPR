@@ -11,7 +11,7 @@ def go(x, y):
     m,b = 1,1
     nu = 0.1
 
-    for i in range (10):
+    for i in range (100):
         y_pred = [x * m + b for x in x]
 
         err = [ abs(y[i] - y_pred[i]) for i in range(0, len(y)) ]
