@@ -19,8 +19,8 @@ def regression(coordinates):
     y.insert(0, coordinates.columns.values.tolist()[1])
     # x = [13, 20, 17, 15, 16, 12, 16, 14, 10, 11]
     # y = [1000, 600, 500, 1200, 1000, 1500, 500, 1200, 1700, 2000]
-    # x = [1, 2, 3, 4, 5]
-    # y = [2, 4, 5, 4, 5]
+    x = [1, 2, 3, 4, 5]
+    y = [2, 4, 5, 4, 5]
     plt.scatter(x, y)
 
     xmean = sum(x) / len(x)
@@ -36,11 +36,16 @@ def regression(coordinates):
 
     yt = [b0 + b1 * xc for xc in x]
     DistanceFromMeanSqr = sum([(yt[_] - ymean)**2 for _ in range(len(yt))])
-
+    DistanceFromY = sum([(yt[_] - y[_])**2 for _ in range(len(yt))])
     errSqr = DistanceFromMeanSqr / y_square_err
     print("b1:",b1, "b0:", b0)
-    print("Среднекв. ошибка: ", errSqr)
+    print("R^2 ", errSqr)
+    err_mean_sqr = DistanceFromY / (len(x) - 2)
+    print("СКО = ", err_mean_sqr)
+    sqrt_err = math.sqrt(err_mean_sqr)
+    print("Eст = ", sqrt_err)
     plt.plot(x, yt, c="red")
+    plt.scatter(x, yt, c="black")
     plt.show()
     return
 def main():
