@@ -76,7 +76,7 @@ wHeightDict, wWeightDict = makeDict(womenHeight, wHeightNormal), makeDict(womenW
 #ОБУЧЕНИЕ ЗАВЕРШЕНО!
 
 #ОПРЕДЕЛЯЕМ ОБЪЕКТ
-unknown = [['Unknown', 186, 74, "doesn't matter"]]
+unknown = [['Unknown', 189, 104, "doesn't matter"]]
 #См в дюймы и кг в фунты
 unknown[0][1] = unknown[0][1] * 0.393701
 unknown[0][2] = unknown[0][2] * 2.20462
