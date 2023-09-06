@@ -13,6 +13,9 @@ def find_square_err(coordinate):
     return square_err, square_err_list
 
 def regression(coordinates):
+    print("Линейная регрессия/логистическая регрессия (0,1):")
+    case = int(input())
+
     x = [coordinate[0] for coordinate in coordinates.values]
     x.insert(0, coordinates.columns.values.tolist()[0])
     y = [coordinate[1] for coordinate in coordinates.values]
@@ -21,8 +24,9 @@ def regression(coordinates):
     # y = [1000, 600, 500, 1200, 1000, 1500, 500, 1200, 1700, 2000]
     x = [1, 2, 3, 4, 5]
     y = [2, 4, 5, 4, 5]
-    plt.scatter(x, y)
 
+    x = [25, 29, 30, 31, 32, 41, 41, 42, 44, 49, 50, 59, 60, 62, 68, 72, 79, 80, 81, 84]
+    y = [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1]
     xmean = sum(x) / len(x)
     ymean = sum(y) / len(y)
 
@@ -35,36 +39,54 @@ def regression(coordinates):
     b0 = ymean - b1 * xmean
 
     yt = [b0 + b1 * xc for xc in x]
-    Distance_yi_ymean = sum([(y[_] - ymean)**2 for _ in range(len(y))])
-    DistanceFromMeanSqr = sum([(yt[_] - ymean)**2 for _ in range(len(yt))])
-    DistanceFromY = sum([(y[_] - yt[_])**2 for _ in range(len(yt))])
+    Distance_yi_ymean = sum([(y[_] - ymean) ** 2 for _ in range(len(y))])
+    DistanceFromMeanSqr = sum([(yt[_] - ymean) ** 2 for _ in range(len(yt))])
+    DistanceFromY = sum([(y[_] - yt[_]) ** 2 for _ in range(len(yt))])
     errSqr = ymean - DistanceFromY / ymean
     # errSqr = DistanceFromMeanSqr / y_square_err
-    print("b1:",b1, "b0:", b0)
     # print("R^2 ", errSqr)
     err_mean_sqr = DistanceFromY / (len(x) - 2)
-    print("Среднеквадратическая ошибка: = ", err_mean_sqr)
     sqrt_err = math.sqrt(err_mean_sqr)
-    print("Стандартная ошибка = ", sqrt_err)
 
-    #Изменчивость выходной переменной
+    # Изменчивость выходной переменной
     Q = Distance_yi_ymean
     Qr = DistanceFromMeanSqr
     Qe = DistanceFromY
-    print("Изменчивость выходной переменной:")
-    print("Q = ", Q, ", Qr = ", Qr, ", Qe = ", Qe)
 
     r_sqr = Qr / Q
-    print("Коэфф. детерминации: ", r_sqr)
-
 
     correlatio = math.sqrt(r_sqr)
     if b1 < 0:
         correlatio = -correlatio
-    print("Коэфф. корреляции:", correlatio)
-    plt.plot(x, yt, c="red")
-    plt.scatter(x, yt, c="black")
-    plt.show()
+
+    if case == 0:
+        print("b1:", b1, "b0:", b0)
+        print("Среднеквадратическая ошибка: = ", err_mean_sqr)
+        print("Стандартная ошибка = ", sqrt_err)
+        print("Изменчивость выходной переменной:")
+        print("Q = ", Q, ", Qr = ", Qr, ", Qe = ", Qe)
+        print("Коэфф. детерминации: ", r_sqr)
+        print("Коэфф. корреляции:", correlatio)
+        plt.scatter(x, y)
+        plt.plot(x, yt, c="red")
+        plt.scatter(x, yt, c="black")
+        plt.show()
+
+    elif case == 1:
+        plt.plot(x, yt, c="red")
+        plt.scatter(x, yt, c="black")
+        for i in range(len(y)):
+            if y[i] < ymean:
+                y[i] = 0
+            else:
+                y[i] = 1
+        plt.scatter(x, y)
+        px = [math.exp(_) / 1 + math.exp(_) for _ in yt]
+        plt.scatter(x, px)
+        plt.show()
+    else:
+        print("Введите значение (1,2)")
+
     return
 def main():
     df = pd.read_excel('lingres_xy.xlsx')
