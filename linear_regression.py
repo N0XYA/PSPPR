@@ -1,5 +1,5 @@
 import pandas as pd
-from decimal import Decimal
+import statistics as st
 import math
 import matplotlib.pyplot as plt
 
@@ -47,10 +47,6 @@ def regression(coordinates):
     sqrt_err = math.sqrt(err_mean_sqr)
     print("Стандартная ошибка = ", sqrt_err)
 
-    #TODO:
-    #   Коэф. корреляции
-
-
     #Изменчивость выходной переменной
     Q = Distance_yi_ymean
     Qr = DistanceFromMeanSqr
@@ -58,14 +54,17 @@ def regression(coordinates):
     print("Изменчивость выходной переменной:")
     print("Q = ", Q, ", Qr = ", Qr, ", Qe = ", Qe)
 
-
     r_sqr = Qr / Q
-
     print("Коэфф. детерминации: ", r_sqr)
 
+
+    correlatio = math.sqrt(r_sqr)
+    if b1 < 0:
+        correlatio = -correlatio
+    print("Коэфф. корреляции:", correlatio)
     plt.plot(x, yt, c="red")
     plt.scatter(x, yt, c="black")
-    # plt.show()
+    plt.show()
     return
 def main():
     df = pd.read_excel('lingres_xy.xlsx')
