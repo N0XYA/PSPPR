@@ -1,40 +1,53 @@
 import matplotlib.pyplot as plt
-import numpy as np
-import time
 
 
-x = [0.90, 4.11, 4.82, 8.53, 8.90, 5.60, 9.32, 11.1, 12.42]
-y = [1.91, 1.84, 4.47, 6.38, 3.92, 2.42, 6.52, 8.63, 9.13]
+x = [242, 290, 340, 363, 430, 450, 500, 390, 450, 500]
+y = [23.2, 24, 23.9, 26.3, 26.5, 26.8, 27.6, 27.6, 28.5, 28.4]
+# x = [1, 2, 3, 4, 5]
+# y = [2, 4, 5, 4, 5]
 
 def go(x, y):
-    plt.ion()
-    m,b = 1,1
-    nu = 0.1
+    plt.scatter(x, y)
+    
+    x_mean = sum(x)/len(x)
+    y_mean = sum(y)/len(y)
+    
+    x_pred = [ x - x_mean for x in x]
+    y_pred = [ y - y_mean for y in y]
 
-    for i in range (100):
-        y_pred = [x * m + b for x in x]
+    print('x - *x', x_pred)
+    print('y - *y', y_pred)
 
-        err = [ abs(y[i] - y_pred[i]) for i in range(0, len(y)) ]
-        err_mean = sum(err) / len(err)     
-        print("Средняя ошибка: ", err_mean)
+    b1 = sum([x_pred[i] * y_pred[i] for i in range(len(x_pred))]) / sum([x ** 2 for x in x_pred])
+    b0 = y_mean -  b1 * x_mean 
+    print('b1', b1)
+    print('b0', b0)
 
-        b_change = [ x[i] * np.sign(y[i] - y_pred[i]) for i in range (0, len(y)) ]
-        b_mean = sum(b_change) / len(b_change)
 
-        m_change = [ np.sign(y[i] - y_pred[i]) for i in range (0, len(y))]
-        m_mean = sum(m_change) / len(m_change)
-
-        m = m + nu * m_mean
-        b = b + nu * b_mean
-
-        plt.clf()
-        plt.scatter(x, y)
-        plt.plot(x, y_pred)
-        plt.draw()
-        plt.gcf().canvas.flush_events()
-        time.sleep(0.2)
-    plt.ioff()
+    y_func = [b0 + b1 * x for x in x]
+    plt.plot(x, y_func, c="pink")
     plt.show()
 
 
-go(x, y)
+    Q = sum([y_pred**2 for y_pred in y_pred])
+    QR = sum([ (y_func[i] - y_mean) ** 2 for i in range(len(y_func))])
+    QE = sum([ (y[i] - y_func[i]) ** 2 for i in range(len(y))])
+    ESKO =  QE/ (len(x) - 2)
+    EST = ESKO ** 0.5
+    r2 = QR/Q   #Детерминация
+    r = r2 ** 0.5 if b1 > 0 else (r ** 0.5 ) * -1   #Корреляция
+
+
+    print("ESKO = ", ESKO)
+    print("EST = ", EST)
+    print("Q = ", Q)
+    print("QR = ", QR)
+    print("QE = ", QE)
+    print("r2 = ", r2)
+    print("r = ", r)
+    return b1, b0
+
+
+b1, b0 = go(x, y)
+xtest = 700
+#print(b0 + b1 * xtest)
