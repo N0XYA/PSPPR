@@ -1,9 +1,9 @@
 <h1>PSPPR solutions in one branch.</h1>
 <p>Ассоциативные правила<p>
 <p>Алгоритм К-средних<p>
-![Alt text](/images/KMeans.png "KMeans")
+![Alt text](images/KMeans.png "KMeans")
 <p>Алгоритм DBSCAN<p>
-<img src="images/DBSCAN.png">
+<img src="./images/DBSCAN.png">
 <p>Наивный Байесовский
 классификатор с нормальным распределением<p>
 <img src="images/bayess.png">
